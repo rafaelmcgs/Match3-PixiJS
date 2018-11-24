@@ -7,7 +7,7 @@ var newer = require('gulp-newer');
 //js
 var closure = require('gulp-closure-compiler');
 var javascriptObfuscator = require('gulp-javascript-obfuscator');
-var jshint = require('gulp-jshint');
+var order = require("gulp-order");
 //html
 var htmlreplace = require('gulp-html-replace');
 var htmlclean = require('gulp-htmlclean');
@@ -45,7 +45,7 @@ gulp.task('start', function(){
 					production = false;
 				}else{
 				console.log(res.first[0]);
-					if(res.first[0] === 'Debug'){
+					if(res.first[0] === 'debug'){
 						production = false;						 
 					}else{
 						production = true;
@@ -73,10 +73,22 @@ gulp.task('jsTask',['imagesTask'], function() {
 	   out = folder.build.prod + folder.assets.js;
 	}
 	
-	var task_ = gulp.src(folder.src + folder.assets.js + '**/*.js');
+	var task_;
 	if(production){
-	   task_ = task_
-		    .pipe(closure({
+	   var temp = gulp.src(folder.src + folder.assets.js + '**/*.js')
+			.pipe(order([
+				folder.src + folder.assets.js + '3th/FontLoader.js',
+				folder.src + folder.assets.js + '3th/pixi.js',
+				folder.src + folder.assets.js + '3th/dragonBones.js',
+				folder.src + folder.assets.js + '3th/pixi-sound.js',
+		   
+			], { base: "./" }))
+		
+			.pipe(concat("concat.js"))
+			.pipe(gulp.dest('temp/'));
+		
+		task_  = gulp.src('./temp/concat.js')
+			.pipe(closure({
       			compilerPath: 'bower_components/closure-compiler/compiler.jar',
 		   		fileName: 'main.js',
 			  	compilerFlags: {
@@ -86,13 +98,9 @@ gulp.task('jsTask',['imagesTask'], function() {
 					warning_level: 'QUIET'
 				  }
     		}))
-			.pipe(jshint())
-			.pipe(jshint.reporter('default'))
 			.pipe(javascriptObfuscator());
 	}else{
-		task_ = task_
-		.pipe(jshint())
-		.pipe(jshint.reporter('default'));
+		task_  = gulp.src(folder.src + folder.assets.js + '**/*.js');
 	}
 	return task_
 		.pipe(gulp.dest(out));
@@ -147,6 +155,10 @@ gulp.task('othersTask',['htmlTask'], function() {
 	return gulp.src([
 		folder.src+"**/*.json",
 		folder.src+"**/*.dbbin",
+		folder.src+"**/*.eot",
+		folder.src+"**/*.svg",
+		folder.src+"**/*.tff",
+		folder.src+"**/*.woff"
 		
 	]).pipe(gulp.dest(out));
 });
