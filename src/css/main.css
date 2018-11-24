@@ -1,3 +1,61 @@
 @charset "utf-8";
 /* CSS Document */
 
+@font-face {
+    font-family: 'Candice';
+    src: url('../fonts/Candice.eot');
+    src: url('../fonts/Candice.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Candice.woff') format('woff'),
+        url('../fonts/Candice.ttf') format('truetype'),
+        url('../fonts/Candice.svg#Candice') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
+body {
+	font-family: 'Candice';
+	background: rgb(234, 140, 35);
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+}
+
+.loaderOuter {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.loaderMiddle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.loaderInner {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#gazeusLogo{
+	max-width: 70vw;
+	max-height: 60vh;
+	display: block;
+	margin: auto;
+	
+}
+#gazeusLogo path {
+	stroke-linecap:round;
+	stroke-linejoin:round;
+    stroke: #FFF;
+    stroke-width: 1px;
+    stroke-dasharray: 1400px;
+    fill: transparent;
+}
