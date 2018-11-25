@@ -24,24 +24,35 @@ function GameManager(){
 	//Create panelManager
 	this.panelManager = new PanelManager(this);
 	
-	//Create mainTitle
+	//Create welcome scene elements 
 	this.mainTitle = new MainTitle();
-
+	this.background = new Background();
 	
+	//Declare start btn	
+	this.mainButton = null;	
 	
-	
+	//Start the loader
 	this.loader.start();
 }
 
 
 GameManager.prototype.update = function(){
 	
+	this.renderer.render(this.stage);
+	requestAnimationFrame(this.update.bind(this));
 };
 GameManager.prototype.resize = function(){
+	//resize the canvas
+	this.renderer.resize(window.innerWidth,window.innerHeight);
 	
+	//resize welcome elements
+	this.mainTitle.resize();
+	this.background.resize();	
+	this.mainButton.resize();
+	
+	//resize others elements
 	this.levelManager.resize();
 	this.panelManager.resize();
-	this.mainTitle.resize();
 	
 };
 
@@ -51,6 +62,8 @@ GameManager.prototype.gameInit = function(){
 	//Create the objects
 	this.levelManager.createObjects();
 	this.panelManager.createObjects();
+	this.background.create();	
+	this.mainButton = new ButtonMain(this,this.openSceneLevelSelect);
 	
 	//Add the canvas to the document
 	this.gameDiv.appendChild(this.canvas);		
@@ -68,6 +81,25 @@ GameManager.prototype.gameInit = function(){
 	//Resize is very important in html5 responsive games	
 	window.addEventListener('resize', this.resize.bind(this));
 	
+	//Insert the background into stage
+	this.stage.addChild(this.background);
+	
+	//Show welcome scene
+	this.openSceneWelcome();
+	
 	//Add animation to the renderer
-	//requestAnimationFrame(this.update.bind(this));	
+	requestAnimationFrame(this.update.bind(this));
+};
+
+
+GameManager.prototype.openSceneWelcome = function(){
+	console.log("Open Welcome scene");
+	this.stage.addChild(this.mainTitle);
+	this.stage.addChild(this.mainButton);
+};
+GameManager.prototype.openSceneLevelSelect = function(){
+	console.log("Open Level Select scene");
+	
+	
+	
 };

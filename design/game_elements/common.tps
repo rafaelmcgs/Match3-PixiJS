@@ -195,8 +195,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">png/elements_0008_btnNormal.png</key>
-            <key type="filename">png/elements_0009_btnHover.png</key>
+            <key type="filename">png/btnHover.png</key>
+            <key type="filename">png/btnNormal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -293,8 +293,6 @@
         <array>
             <filename>png/barBG.png</filename>
             <filename>png/barColor.png</filename>
-            <filename>png/elements_0008_btnNormal.png</filename>
-            <filename>png/elements_0009_btnHover.png</filename>
             <filename>png/headerContainer.png</filename>
             <filename>png/homeHover.png</filename>
             <filename>png/homeNormal.png</filename>
@@ -302,6 +300,8 @@
             <filename>png/panelContainer.png</filename>
             <filename>png/panelScore.png</filename>
             <filename>png/star.png</filename>
+            <filename>png/btnHover.png</filename>
+            <filename>png/btnNormal.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

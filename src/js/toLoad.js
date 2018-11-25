@@ -8,7 +8,7 @@ var toLoad = {
 		"assets/jellys/jelly5/jelly5"
 	],
 	images : [
-		"assets/background/01.png"
+		"assets/background/bg01.png"
 	],
 	spriteSheets : [
 		"assets/common/common"
