@@ -16,11 +16,11 @@
 	<script src="js/loader.js"></script>
 	<script src="js/toLoad.js"></script>
 	<script src="js/background.js"></script>
-	<script src="js/pool.js"></script>
+	<script src="js/jellyPool.js"></script>
 	<script src="js/mainTitle.js"></script>
 	<script src="js/button.js"></script>
 	<script src="js/buttonHome.js"></script>
-	<script src="js/panel.js"></script>
+	<script src="js/panelManager.js"></script>
 	<script src="js/levelManager.js"></script>
 	<script src="js/levelsConfig.js"></script>
 	<script src="js/topBar.js"></script>
@@ -31,8 +31,6 @@
 
 <body id="gazeusGame">
 	<div id="logoDiv">
-		
-
 		<div class="loaderOuter">
 			<div class="loaderMiddle">
 				<div class="loaderInner">
@@ -42,8 +40,9 @@
 				</div>
 			</div>
 		</div>
-		
 	</div>
+	
+	<div id="gameDiv"></div>
 	
 	<script type="text/javascript">
 		var gameManager;

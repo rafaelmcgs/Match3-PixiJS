@@ -13,16 +13,9 @@ function Loader(gameManager_, onCompleteCallBack_){
 	
 	this.addResourcesToLoad();
 	
-	//Setup the callback function to loader when it is completed
-	this.pixiLoader.load(this.onComplete.bind(this));
-	
-	
-	//Setup the callback function when each file is completed
-	this.pixiLoader.onLoad.add(this.onFileLoad.bind(this));
-	
-	console.log("Loader started:"+this.resourceCount+" files");
 	
 }
+
 
 Loader.prototype.addResourcesToLoad = function(){
 	var i;
@@ -89,6 +82,17 @@ Loader.prototype.addResourcesToLoad = function(){
 	
 };
 
+Loader.prototype.start = function(){
+	//Setup the callback function to loader when it is completed
+	this.pixiLoader.load(this.onComplete.bind(this));
+	
+	
+	//Setup the callback function when each file is completed
+	this.pixiLoader.onLoad.add(this.onFileLoad.bind(this));
+	
+	console.log("Loader started:"+this.resourceCount+" files");
+};
+
 Loader.prototype.onFileLoad = function(){
 	//increase the counter
 	this.resourcesLoaded += 1;
@@ -119,5 +123,5 @@ Loader.prototype.onComplete = function(){
 	var bodyEl = document.getElementById("gazeusGame");
 	bodyEl.className = "gameStarted";
 	
-	setTimeout(this.gameManager.gameInit.bind(this.gameManager),2000);
+	setTimeout(this.onCompleteCallback.bind(this.gameManager),2000);
 };
