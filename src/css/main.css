@@ -17,12 +17,22 @@
 
 body {
 	font-family: 'Candice';
-	background: rgb(234, 140, 35);
+	background-color: rgb(234, 140, 35);
 	margin:0;
 	padding:0;
 	width:100%;
 	height:100%;
 	overflow:hidden;
+}
+
+body.gameStarted  {
+	background-color: rgb(0, 0, 0);
+	transition: background-color 0.5s ease 1.5s;	
+}
+
+body.gameStarted #logoDiv {
+	opacity: 0;
+	transition: opacity 0.5s ease 1.5s;
 }
 
 .loaderOuter {
@@ -58,4 +68,5 @@ body {
     stroke-width: 1px;
     stroke-dasharray: 1400px;
     fill: transparent;
+	transition: stroke-dashoffset 0.5s ease, fill 0.5s ease 0.5s;
 }
