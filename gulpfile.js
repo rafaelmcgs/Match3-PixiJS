@@ -158,7 +158,9 @@ gulp.task('othersTask',['htmlTask'], function() {
 		folder.src+"**/*.eot",
 		folder.src+"**/*.svg",
 		folder.src+"**/*.tff",
-		folder.src+"**/*.woff"
+		folder.src+"**/*.woff",
+		folder.src+"**/*.mp3",
+		folder.src+"**/*.ogg"
 		
 	]).pipe(gulp.dest(out));
 });

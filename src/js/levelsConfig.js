@@ -11,7 +11,7 @@ var levelsConfig = [
 			[0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0]
 		],
-		pointsGoal: 10,
+		pointsGoal: 2000,
 		moves: 20
 	},
 	{
