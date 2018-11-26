@@ -1,67 +1,70 @@
-function Button(manager_,callBack_, text_){
+function Button(manager_,callBack_, options){
+	PIXI.Container.call(this);
+	
+	this.manager = manager_;
+	this.callBack = callBack_;		
 	
 	this.textStyle  = {
 		fontSize:100,
 		fontFamily:"Candice",
 		fill:'#ffffff'
-	};
+	};	
 	
-	PIXI.Container.call(this);
-	
-	this.manager = manager_;
-	this.callBack = callBack_;	
-	
-	this.textures = {
-		normal: PIXI.Texture.fromFrame('btnNormal.png'),
-		hover: PIXI.Texture.fromImage('btnHover.png')
-	};
+	if("textures" in options){
+	    this.textures = options.textures;
+	}else{
+		this.textures = {
+			normal: PIXI.Texture.fromFrame('btnNormal.png'),
+			hover: PIXI.Texture.fromImage('btnHover.png')
+		};		
+	}
 	
 	//Create and add box
 	this.box = new PIXI.Sprite(this.textures.normal);
 	this.addChild(this.box);
 	
-	//Create and add text
+	/**
+	 *Create and add text
+	 */
 	this.text=null;
-	if(text_ != null){
-		this.text = new PIXI.Text(text_);	
-		this.text.style = this.textStyle;
-		this.addChild(this.text);
-		
-		/**
-		 *Resize text
-		 */
-		var textBounds;
-		var boxBounds = this.box.getLocalBounds();
-		this.text.style.fontSize = 100;
-		var sizeOK = false;
-		var maxSize = {
+	
+	//set max size of the text
+	if("textMaxSize" in options){
+		this.textMaxSize = options.textMaxSize;
+	}else{
+		this.textMaxSize = {
 			w:250,
 			h:75
 		};
-		//Loop til textBounds fit in the box
-		while(!sizeOK){
-			//Get the textBounds
-			textBounds = this.text.getLocalBounds();
-			if(
-				textBounds.width < maxSize.w
-				&& textBounds.height < maxSize.h
-			){
-				//If fit in the box stop the loop
-				sizeOK=true;
-			}else{
-				//If not decrease the fontsize
-			   this.text.style.fontSize -= 1;
-			}
+	}
+	
+	//set margins of the text
+	this.textMargins = {
+		top:-16,
+		left:0
+	};
+	if("textMargins" in options){
+		if("top" in options.textMargins){
+			this.textMargins.top = options.textMargins.top;
 		}
-		/**
-		 *Reposition text
-		 */
-		this.text.x = (boxBounds.width - textBounds.width)/2;
-		this.text.y = (boxBounds.height - textBounds.height)/2 -16;
+		if("left" in options.textMargins){
+			this.textMargins.left = options.textMargins.left;
+		}
+	}
+	
+	//set text and insert into container
+	if("text" in options){
+		this.text = new PIXI.Text(options.text);	
+		this.text.style = this.textStyle;
+		this.addChild(this.text);
+		
+		this.resizeText();
 	}
 	
 	
-	//Mouse/touch events	
+	/**
+	 *Mouse/touch events
+	 */
 	this.interactive = true;
 	this.isdown = false;
 	this.isOver = false;	
@@ -75,17 +78,30 @@ function Button(manager_,callBack_, text_){
 }
 
 Button.prototype = Object.create(PIXI.Container.prototype);
+
 Button.prototype.resize = function(maxWidth, maxHeight){
 	
 	//Get bounds of this container, without scale
 	var buttonBounds = this.getLocalBounds();
+	var max = {
+		width: maxWidth,
+		height:maxHeight
+	};
+	
+	//Give values if null
+	if( maxWidth == null){
+	   max.width = buttonBounds.width;
+	}
+	if(maxHeight == null){
+	   max.height = buttonBounds.height;
+	}
 	
 	var scale = {
-		x:  maxWidth / buttonBounds.width,
-		y:  maxHeight / buttonBounds.height,
+		x:   max.width / buttonBounds.width,
+		y:  max.height / buttonBounds.height,
 		final:0
 	};
-	if(scale.x > scale.y){
+	if(scale.x < scale.y){
 		scale.final = scale.x;
 	}else{
 		scale.final = scale.y;
@@ -93,6 +109,39 @@ Button.prototype.resize = function(maxWidth, maxHeight){
 	this.scale.x = this.scale.y = scale.final;
 	
 };
+
+Button.prototype.resizeText = function(){
+	
+	if(this.text != null){
+		/**
+		 *Resize text
+		 */
+		var textBounds;
+		var boxBounds = this.box.getLocalBounds();
+		this.text.style.fontSize = 200;
+		var sizeOK = false;
+		//Loop til textBounds fit in the box
+		while(!sizeOK){
+			//Get the textBounds
+			textBounds = this.text.getLocalBounds();
+			if(
+				textBounds.width < this.textMaxSize.w
+				&& textBounds.height < this.textMaxSize.h
+			){
+				//If fit in the box stop the loop
+				sizeOK=true;
+			}else{
+				//If not decrease the fontsize
+			   this.text.style.fontSize -= 2;
+			}
+		}
+		/**
+		 *Reposition text
+		 */
+		this.text.x = (boxBounds.width - textBounds.width)/2 + this.textMargins.left;
+		this.text.y = (boxBounds.height - textBounds.height)/2 + this.textMargins.top;
+	}
+}
 
 Button.prototype.onButtonDown = function() {
     this.isdown = true;
@@ -102,7 +151,7 @@ Button.prototype.onButtonDown = function() {
 Button.prototype.onButtonUp = function() {
     this.isdown = false;
     if (this.isOver) {
-		this.callBack();
+		this.callBack.call(this.manager);
         this.box.texture = this.textures.hover;
     }
     else {

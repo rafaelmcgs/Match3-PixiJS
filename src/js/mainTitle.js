@@ -19,18 +19,19 @@ MainTitle.prototype.resize = function(){
  	};
 	
 	//Define text fontsize
-	this.style.fontSize = 100;	
+	this.style.fontSize = 300;	
 	var sizeOK = false;
+	
 	//Loop til textBounds fit in maxSize
 	while(!sizeOK){
-		elementBounds = this. getLocalBounds();
+		elementBounds = this.getLocalBounds();
 		if(
 			elementBounds.width < maxSize.width
 			&& elementBounds.height < maxSize.height
 		){
 			sizeOK=true;
 		}else{
-		   this.style.fontSize -= 1;
+		   this.style.fontSize -= 3;
 		}
 	}
 	

@@ -37,20 +37,22 @@ function GameManager(){
 
 
 GameManager.prototype.update = function(){
+	this.panelManager.update();
 	
 	this.renderer.render(this.stage);
 	requestAnimationFrame(this.update.bind(this));
 };
+
 GameManager.prototype.resize = function(){
-	//resize the canvas
+	//Resize the canvas
 	this.renderer.resize(window.innerWidth,window.innerHeight);
 	
-	//resize welcome elements
+	//Resize welcome elements
 	this.mainTitle.resize();
 	this.background.resize();	
 	this.mainButton.resize();
 	
-	//resize others elements
+	//Resize others elements
 	this.levelManager.resize();
 	this.panelManager.resize();
 	
@@ -63,7 +65,7 @@ GameManager.prototype.gameInit = function(){
 	this.levelManager.createObjects();
 	this.panelManager.createObjects();
 	this.background.create();	
-	this.mainButton = new ButtonMain(this,this.openSceneLevelSelect);
+	this.mainButton = new ButtonMain(this,this.mainButtonAction);
 	
 	//Add the canvas to the document
 	this.gameDiv.appendChild(this.canvas);		
@@ -91,7 +93,18 @@ GameManager.prototype.gameInit = function(){
 	requestAnimationFrame(this.update.bind(this));
 };
 
+GameManager.prototype.mainButtonAction = function(){
+	this.stage.removeChild(this.mainTitle);
+	this.stage.removeChild(this.mainButton);
+	
+	this.openSceneLevelSelect();
+	
+};
 
+
+/**
+ * Scenes Init
+ */
 GameManager.prototype.openSceneWelcome = function(){
 	console.log("Open Welcome scene");
 	this.stage.addChild(this.mainTitle);
@@ -100,6 +113,18 @@ GameManager.prototype.openSceneWelcome = function(){
 GameManager.prototype.openSceneLevelSelect = function(){
 	console.log("Open Level Select scene");
 	
+	this.panelManager.open("levelSelect");
+	this.stage.addChild(this.panelManager);
 	
+};
+
+
+
+/**
+ * Scenes Close
+ */
+GameManager.prototype.removePanel = function(){
+	console.log("Level Select scene was removed");
+	this.stage.removeChild(this.panelManager);
 	
 };
