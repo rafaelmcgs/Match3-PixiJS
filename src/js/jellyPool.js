@@ -1,4 +1,5 @@
-function JellyPool(){
+function JellyPool(board_){
+    this.board = board_;
 	this.jellys = {
         1:[],
         2:[],
@@ -7,7 +8,7 @@ function JellyPool(){
         5:[]
     };
 
-    for(var i =0;i<90;i++){
+    for(var i =0;i<40;i++){
         this.addJelly(1,i);
         this.addJelly(2,i);
         this.addJelly(3,i);
@@ -16,7 +17,7 @@ function JellyPool(){
     }
 }
 JellyPool.prototype.addJelly = function(type,id){
-	var jelly = new Jelly(type,id);
+	var jelly = new Jelly(type,id,this.board);
 	this.jellys[type].push(jelly);
 };
 

@@ -142,6 +142,10 @@ TopBar.prototype.setRemainingMoves = function(value){
     this.repositionTexts();
 };
 
+TopBar.prototype.setScoreGoal = function(value){
+	this.scoreGoalText.text = value;
+    this.repositionTexts();
+};
 TopBar.prototype.setScoreNow = function(value){
 	this.scoreNowText.text = value;
     this.repositionTexts();
