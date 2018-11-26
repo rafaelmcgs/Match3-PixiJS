@@ -46,7 +46,7 @@ function Jelly(type_,id_,board_){
      */
     this.background = new PIXI.Graphics();
     this.background.lineStyle(3, 0xFFFFFF, 1,0);
-    this.background.beginFill(0x000000, 0.4);
+    this.background.beginFill(0x000000, 0.6);
     this.background.drawRect(0,0,184,184);
     this.background.alpha = 0;
 
@@ -105,4 +105,14 @@ Jelly.prototype.setAddress = function(newAddress){
 
 Jelly.prototype.refresh = function(){
     this.jellyObj.animation.play("idle",1);
+    this.background.alpha = 0;
+
 };
+
+Jelly.prototype.setSelection = function(bool){
+    if(bool){
+        this.background.alpha = 1;
+    }else{        
+        this.background.alpha = 0;
+    }
+}

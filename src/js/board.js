@@ -20,6 +20,7 @@ function Board(manager_){
     };
     this.jellysAreMoving = false;
     this.jellysSwapping = [];
+    this.jellySelected = null;
     this.hasAnimation = false;
 
     
@@ -318,9 +319,56 @@ Board.prototype.pointerup = function(event){
     }
     this.eventIsDown = false;
 
+    if(this.jellySelected==null){
+        var firstAddress = {
+            line: Math.floor(this.eventStartPoint.y / 184),
+            col: Math.floor(this.eventStartPoint.x / 184)
+        };
+        var pointNow = event.data.getLocalPosition(this);
+        var nowAddress = {
+            line: Math.floor(pointNow.y / 184),
+            col: Math.floor(pointNow.x / 184)
+        };
+        if(firstAddress.line == nowAddress.line && firstAddress.col == nowAddress.col){
+            //select the jelly
+            this.jellySelected = firstAddress;
+            this.jellysMap[this.jellySelected.line][this.jellySelected.col].setSelection(true);
+        }
+    }else{
+        var pointNow = event.data.getLocalPosition(this);
+        var nowAddress = {
+            line: Math.floor(pointNow.y / 184),
+            col: Math.floor(pointNow.x / 184)
+        };
+        
+        if(this.jellySelected.line == nowAddress.line && this.jellySelected.col == nowAddress.col){
+            //unselect the jelly
+            this.jellysMap[this.jellySelected.line][this.jellySelected.col].setSelection(false);
+            this.jellySelected = null;
+        }else{
+            //check if is adjacent object
+            if(nowAddress.line == this.jellySelected.line && this.jellySelected.col-1 == nowAddress.col){
+                //left                
+                this.insertJellySwap(this.jellySelected,{line:0,col:-1});
+            }else if(nowAddress.line == this.jellySelected.line && this.jellySelected.col+1 == nowAddress.col){
+                //right
+                this.insertJellySwap(this.jellySelected,{line:0,col:1});
+            }else if(nowAddress.line == this.jellySelected.line-1 && this.jellySelected.col == nowAddress.col){
+                //top
+                this.insertJellySwap(this.jellySelected,{line:-1,col:0});
+            }else if(nowAddress.line == this.jellySelected.line+1 && this.jellySelected.col == nowAddress.col){
+                //bottom
+                this.insertJellySwap(this.jellySelected,{line:1,col:0});
+            }
+        }
+
+    }
+
+    
+
 };
 Board.prototype.pointermove = function(event){
-    if(!this.eventIsDown){
+    if(!this.eventIsDown || this.jellySelected != null){
         return;
     }
     var pointNow = event.data.getLocalPosition(this);
@@ -356,6 +404,12 @@ Board.prototype.pointermove = function(event){
  * Swap Functions
  */
 Board.prototype.insertJellySwap = function(address,movement){
+    if(this.jellySelected != null){
+        //reset selection
+        this.jellysMap[this.jellySelected.line][this.jellySelected.col].setSelection(false);
+        this.jellySelected = null;
+    }
+
     var newAdress = {
         line: address.line + movement.line,
         col: address.col + movement.col,
