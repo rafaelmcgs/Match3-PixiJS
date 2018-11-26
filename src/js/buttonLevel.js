@@ -28,6 +28,8 @@ ButtonLevel.prototype = Object.create(Button.prototype);
 
 //The original function must be overwrited because we need to send paramater to callback function
 ButtonLevel.prototype.onButtonUp = function() {
+	
+	PIXI.sound.play("sound-button_release");
     this.isdown = false;
     if (this.isOver) {
 		this.callBack.call(this.manager,this.levelIndex);

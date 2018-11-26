@@ -74,7 +74,7 @@ Loader.prototype.addResourcesToLoad = function(){
 		//extrac name from resource path
 		name = resource.substr(resource.lastIndexOf('/') + 1);
 		
-		this.pixiLoader.add("sound-"+name, resource);	
+		this.pixiLoader.add("sound-"+name, resource+".{mp3,ogg}");	
 		
 		this.resourceCount += 1;	
 		

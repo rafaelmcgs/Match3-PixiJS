@@ -145,7 +145,8 @@ Button.prototype.resizeText = function(){
 Button.prototype.onButtonDown = function() {
     this.isdown = true;
     this.isOver = true;
-    this.box.texture = this.textures.hover;
+	this.box.texture = this.textures.hover;
+	PIXI.sound.play("sound-button_down");
 };
 
 Button.prototype.onButtonUp = function() {
@@ -157,6 +158,7 @@ Button.prototype.onButtonUp = function() {
     else {
         this.box.texture = this.textures.normal;
     }
+	PIXI.sound.play("sound-button_release");
 };
 
 Button.prototype.onButtonOver = function() {

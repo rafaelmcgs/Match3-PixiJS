@@ -13,5 +13,12 @@ var toLoad = {
 	spriteSheets : [
 		"assets/common/common"
 	],
-	sounds : []
+	sounds : [
+		"assets/sounds/bomb_sound1",
+		"assets/sounds/button_down",
+		"assets/sounds/button_release",
+		"assets/sounds/candy_land1",
+		"assets/sounds/level_completed",
+		"assets/sounds/negative_switch_sound1"
+	]
 };

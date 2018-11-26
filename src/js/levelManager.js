@@ -142,6 +142,7 @@ LevelManager.prototype.endMatch = function(){
         options.stars+=1;
     }
     this.board.activated = false;
+    PIXI.sound.play("sound-level_completed");
 
     this.gameManager.openPanelScore(options);
 };

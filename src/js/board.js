@@ -472,6 +472,7 @@ Board.prototype.insertJellySwap = function(address,movement){
     this.jellysMap[newAdress.line][newAdress.col].addMovement(newAdress.col*184,newAdress.line*184);
     
 
+	PIXI.sound.play("sound-candy_land1");
     //inform to the board about this swap
     this.jellysSwapping.push(newAdress);
     this.jellysSwapping.push(address);
@@ -483,6 +484,7 @@ Board.prototype.reverseJellysSwap = function(){
         return;
     }
     
+	PIXI.sound.play("sound-negative_switch_sound1");
     this.manager.increaseMoves();
     var jellys = this.jellysSwapping;
 
@@ -623,6 +625,8 @@ Board.prototype.checkAndInsertMatch3 = function(){
     }
 
     if(jellysToExplode.length > 0){
+        
+	    PIXI.sound.play("sound-bomb_sound1");
         this.comboCount++;
         this.manager.increaseScore(jellysToExplode.length * this.comboCount * 15);
         return true;
