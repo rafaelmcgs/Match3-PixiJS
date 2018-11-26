@@ -32,7 +32,7 @@ Loader.prototype.addResourcesToLoad = function(){
 		//extrac name from resource path
 		name = resource.substr(resource.lastIndexOf('/') + 1);
 		//add the dragonBones files
-		this.pixiLoader.add("dB-"+name+"-bonesData", resource+"_ske.dbbin");
+		this.pixiLoader.add("dB-"+name+"-bonesData", resource+"_ske.dbbin", { loadType: PIXI.loaders.Resource.LOAD_TYPE.XHR, xhrType: PIXI.loaders.Resource.XHR_RESPONSE_TYPE.BUFFER });
 		this.pixiLoader.add("dB-"+name+"-textureData", resource+"_tex.json");
 		this.pixiLoader.add("dB-"+name+"-textureImg", resource+"_tex.png");
 		

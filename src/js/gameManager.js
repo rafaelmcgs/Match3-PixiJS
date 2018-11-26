@@ -38,6 +38,7 @@ function GameManager(){
 
 GameManager.prototype.update = function(){
 	this.panelManager.update();
+	this.levelManager.update();
 	
 	this.renderer.render(this.stage);
 	requestAnimationFrame(this.update.bind(this));
@@ -115,14 +116,23 @@ GameManager.prototype.openSceneLevelSelect = function(){
 	
 	this.panelManager.open("levelSelect");
 	this.stage.addChild(this.panelManager);
-	
+};
+GameManager.prototype.openSceneMatch = function(levelIndex){
+	console.log("Open Match scene");
+
+	this.levelManager.open(levelIndex);
+	this.stage.addChild(this.levelManager);
 };
 
 
 
 /**
- * Scenes Close
+ * Global specific panel functions
  */
+GameManager.prototype.openPanelHome = function(){
+	console.log("Open Home Panel");
+};
+
 GameManager.prototype.removePanel = function(){
 	console.log("Level Select scene was removed");
 	this.stage.removeChild(this.panelManager);

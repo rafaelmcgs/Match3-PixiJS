@@ -70,7 +70,6 @@ function Button(manager_,callBack_, options){
 	this.isOver = false;	
     this.on('pointerdown', this.onButtonDown.bind(this));
     this.on('pointerup', this.onButtonUp.bind(this));
-    this.on('pointerupoutside', this.onButtonUp.bind(this));
     this.on('pointerover', this.onButtonOver.bind(this));
     this.on('pointerout', this.onButtonOut.bind(this));
 	
@@ -145,6 +144,7 @@ Button.prototype.resizeText = function(){
 
 Button.prototype.onButtonDown = function() {
     this.isdown = true;
+    this.isOver = true;
     this.box.texture = this.textures.hover;
 };
 

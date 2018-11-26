@@ -182,8 +182,8 @@ PanelManager.prototype.buttonOkAction = function(){
 PanelManager.prototype.buttonCancelAction = function(){
 	
 };
-PanelManager.prototype.buttonLevelAction = function(index){
-	console.log(index);
+PanelManager.prototype.buttonLevelAction = function(levelIndex){
+	console.log("Level with index "+levelIndex+" was selected");
 	this.opened = false;
-	
+	this.gameManager.openSceneMatch(levelIndex);
 };
