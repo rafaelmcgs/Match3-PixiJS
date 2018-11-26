@@ -125,16 +125,37 @@ GameManager.prototype.openSceneMatch = function(levelIndex){
 };
 
 
-
 /**
  * Global specific panel functions
  */
 GameManager.prototype.openPanelHome = function(){
+	if(this.levelManager.lockEvents){
+		return;
+	}
 	console.log("Open Home Panel");
+	this.panelManager.open("home");
+	this.stage.addChild(this.panelManager);
+	this.levelManager.lockEvents = true;
 };
-
+GameManager.prototype.openPanelScore = function(options){
+	console.log("Open score Panel");
+	this.panelManager.open("score",options);
+	this.stage.addChild(this.panelManager);
+	this.levelManager.lockEvents = true;
+};
 GameManager.prototype.removePanel = function(){
 	console.log("Level Select scene was removed");
 	this.stage.removeChild(this.panelManager);
+	this.levelManager.lockEvents = false;
+	
+};
+
+
+GameManager.prototype.closeLevel = function(){
+	this.levelManager.close();
+};
+GameManager.prototype.removeLevel = function(){
+	console.log("Level Select scene was removed");
+	this.stage.removeChild(this.levelManager);
 	
 };

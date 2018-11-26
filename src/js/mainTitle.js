@@ -5,7 +5,9 @@ function MainTitle(){
 	this.style  = {
 		fontSize:26,
 		fontFamily:"Candice",
-		fill:'#ffffff'
+		fill:'#ee3875',
+		dropShadow: true,
+		dropShadowColor: "#009fc5"
 	}; 	
 	this.resize();
 }

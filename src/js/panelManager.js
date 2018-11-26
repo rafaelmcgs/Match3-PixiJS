@@ -11,17 +11,24 @@ function PanelManager(gameManager_){
 		title: {
 			fontSize:80,
 			fontFamily:"Candice",
-			fill:'#ffffff',
+			fill:'#ee3875',
+			dropShadow: true,
+			dropShadowColor: "#009fc5"
 		},
 		messsage: {
-			fontSize:30,
+			fontSize:50,
 			fontFamily:"Candice",
-			fill:'#ffffff'
+			fill:'#ee3875',
+			align:'center',
+			dropShadow: true,
+			dropShadowColor: "#009fc5"
 		},
 		scoreText: {
-			fontSize:30,
+			fontSize:80,
 			fontFamily:"Candice",
-			fill:'#ffffff'
+			fill:'#ee3875',
+			dropShadow: true,
+			dropShadowColor: "#009fc5"
 		}
 		
 	};
@@ -71,6 +78,11 @@ PanelManager.prototype.createObjects = function(){
 		this.buttons.levels.push(new ButtonLevel(this,this.buttonLevelAction,i));
 	}
 	
+	//stars
+	
+	for(var i = 0;i<3;i++){
+		this.stars.push(new Star(this,this.buttonLevelAction,i));
+	}
 };
 
 PanelManager.prototype.resize = function(){
@@ -127,7 +139,7 @@ PanelManager.prototype.update = function(){
 };
 
 PanelManager.prototype.open = function(type,options){
-	
+	this.removeChildren();
 	this.opened = true;
 	this.activated = true;
 	
@@ -139,6 +151,8 @@ PanelManager.prototype.open = function(type,options){
 	//Add panel type elements
 	switch(type){
 		case "levelSelect": this.openLevelSelect(); break;
+		case "home": this.openHome(); break;
+		case "score": this.openScore(options); break;
 	}
 	
 	this.repositionTitle();
@@ -172,14 +186,108 @@ PanelManager.prototype.openLevelSelect = function(){
 		this.buttons.levels[i].y = (line * 180) + marginTop;
 	}
 };
+PanelManager.prototype.openHome = function(){
+	//Set Title	
+	this.title.text = "";
 
+	//insert msg object
+	this.messsage.text = "You will leave\n this game.\nAre you sure?";
+	this.addChild(this.messsage);
+	
+	var boxBounds = this.box.getLocalBounds();
+	var msgBounds = this.messsage.getLocalBounds();
+
+	this.messsage.x = (boxBounds.width - msgBounds.width)/2;
+	this.messsage.y = 250;
+
+	//insert buttons	
+	this.addChild(this.buttons.ok);
+	this.addChild(this.buttons.cancel);
+
+	//resize buttons
+	this.buttons.ok.resize(boxBounds.width*0.4);
+	this.buttons.cancel.resize(boxBounds.width*0.4);
+
+	//reposition buttons
+	this.buttons.ok.x = boxBounds.width*0.05;
+	this.buttons.ok.y = boxBounds.height*0.7;
+
+	this.buttons.cancel.x = boxBounds.width*0.55;
+	this.buttons.cancel.y = boxBounds.height*0.7;
+
+};
+PanelManager.prototype.openScore = function(options){
+	//Set Title	
+	this.title.text = "Level Complete";
+
+	
+	var boxBounds = this.box.getLocalBounds();
+
+	//insert buttons	
+	this.addChild(this.buttons.ok);
+
+	//resize buttons
+	this.buttons.ok.resize(boxBounds.width*0.4);
+
+	//reposition buttons
+	this.buttons.ok.x = boxBounds.width*0.3;
+	this.buttons.ok.y = boxBounds.height*0.75;
+
+	//insert stars
+	this.addChild(this.stars[0]);
+	this.addChild(this.stars[1]);
+	this.addChild(this.stars[2]);
+
+	
+	this.stars[0].x = (boxBounds.width - 3* 155)/2;
+	this.stars[1].x = (155)+(boxBounds.width - 3* 155)/2;
+	this.stars[2].x = (2 * 155)+(boxBounds.width - 3* 155)/2;
+	this.stars[0].y = this.stars[1].y = this.stars[2].y = 240;
+
+	if(options.stars >0){
+		this.stars[0].showStar(true);
+	}else{		
+		this.stars[0].showStar(false);
+	}
+
+	if(options.stars >1){
+		this.stars[1].showStar(true);
+	}else{		
+		this.stars[1].showStar(false);
+	}
+
+	if(options.stars >2){
+		this.stars[2].showStar(true);
+	}else{		
+		this.stars[2].showStar(false);
+	}
+
+	
+	this.scoreText.text =options.score;
+
+	var scoreBGBounds = this.scoreBG.getLocalBounds();
+	var scoreTextBounds = this.scoreText.getLocalBounds();
+	
+	this.scoreBG.x = (boxBounds.width - scoreBGBounds.width) /2;
+	this.scoreBG.y = 400;
+
+	this.scoreText.x = this.scoreBG.x + (scoreBGBounds.width - scoreTextBounds.width)/2;
+	this.scoreText.y = this.scoreBG.y + (scoreBGBounds.height - scoreTextBounds.height)/2;
+
+	this.addChild(this.scoreBG);
+	this.addChild(this.scoreText);
+
+};
 
 
 
 PanelManager.prototype.buttonOkAction = function(){
+	this.gameManager.closeLevel();
+	this.open("levelSelect");
 	
 };
 PanelManager.prototype.buttonCancelAction = function(){
+	this.opened = false;
 	
 };
 PanelManager.prototype.buttonLevelAction = function(levelIndex){

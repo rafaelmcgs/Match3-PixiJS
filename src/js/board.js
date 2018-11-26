@@ -2,7 +2,7 @@ function Board(manager_){
     PIXI.Container.call(this);
 
     this.manager = manager_;
-
+    this.activated = false;
     this.comboCount = 0;
     /**
      * map variables
@@ -95,6 +95,9 @@ Board.prototype.resize = function(){
 	}
 };
 Board.prototype.update = function(){
+    if(!this.activated){
+        return;
+    }
     var jellymap = this.jellysMap;
     var hasJellyMovement = false;
 	for(var line = jellymap.length-1; line >= 0;line--){
@@ -239,6 +242,29 @@ Board.prototype.populate = function(){
 
     this.addJellysToBoard();
 };
+
+Board.prototype.reset = function(){
+    
+    this.eventIsDown = false;
+    this.jellysAreMoving = false;
+    this.jellysSwapping = [];
+    this.jellySelected = null;
+    this.hasAnimation = false;
+    
+	for(var line = this.jellysMap.length-1; line >= 0;line--){
+        for(var col = this.jellysMap[line].length-1; col >=0;col--){
+            var jelly = this.jellysMap[line][col];
+
+            if(jelly != -1){
+                this.jellyContainer.removeChild(jelly);
+                this.jellyPool.return(jelly);
+                this.jellysMap[line][col] = -1;
+            }
+        }
+
+    }
+};
+
 Board.prototype.addJellysToBoard = function(){
     for(var col = 0; col < this.jellysToInsert.length;col++){
         for(var i = 0; i < this.jellysToInsert[col].length;i++){
@@ -304,7 +330,7 @@ Board.prototype.removeJelly = function(address){
  * events functions
  */
 Board.prototype.pointerdown = function(event){
-    if(this.jellysAreMoving || this.hasAnimation){
+    if(this.jellysAreMoving || this.hasAnimation || this.manager.lockEvents){
         return;
     }
     this.eventIsDown = true;
@@ -314,7 +340,7 @@ Board.prototype.pointerdown = function(event){
     this.comboCount = 0;
 };
 Board.prototype.pointerup = function(event){
-    if(!this.eventIsDown){
+    if(!this.eventIsDown || this.manager.lockEvents){
         return;
     }
     this.eventIsDown = false;
@@ -368,7 +394,7 @@ Board.prototype.pointerup = function(event){
 
 };
 Board.prototype.pointermove = function(event){
-    if(!this.eventIsDown || this.jellySelected != null){
+    if(!this.eventIsDown || this.jellySelected != null || this.manager.lockEvents){
         return;
     }
     var pointNow = event.data.getLocalPosition(this);
@@ -418,9 +444,9 @@ Board.prototype.insertJellySwap = function(address,movement){
     //Check if movement is going out of board
     if(
         newAdress.col < 0
-        || newAdress.col > this.jellysMap[0].length
+        || newAdress.col >= this.jellysMap[0].length
         || newAdress.line < 0
-        || newAdress.line > this.jellysMap.length
+        || newAdress.line >= this.jellysMap.length
     ){
         console.log("movement fail");
         return;

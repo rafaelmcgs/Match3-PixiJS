@@ -24,6 +24,9 @@ function LevelManager(gameManager_){
 
     this.board = null;
 
+    //important to lock events when panel is openned
+    this.lockEvents = false;
+
 	
 }
 LevelManager.prototype = Object.create(PIXI.Container.prototype);
@@ -59,7 +62,7 @@ LevelManager.prototype.update = function(){
 		//Disable update
 		this.activated = false;
 		//Remove this container from stage
-		this.gameManager.removePanel();
+		this.gameManager.removeLevel();
 	}else{
         this.board.update();
 
@@ -89,19 +92,56 @@ LevelManager.prototype.open = function(levelIndex){
     this.topBar.setScoreNow(this.scoreNow);
     this.topBar.setBar(this.scoreNow/this.scoreGoal);
     this.topBar.setRemainingMoves(this.remainingMoves);
+
+    
+    this.board.activated = true;
+};
+LevelManager.prototype.close = function(){
+    this.board.reset();
+    this.opened = false;
 };
 
 LevelManager.prototype.increaseScore = function(points){
     this.scoreNow += points;
+    if(this.scoreNow > this.scoreGoal){
+        this.scoreNow = this.scoreGoal;
+    }
     this.topBar.setScoreNow(this.scoreNow);
     this.topBar.setBar(this.scoreNow/this.scoreGoal);
+
+    if(this.scoreNow == this.scoreGoal){
+        this.endMatch();
+    }
 };
 
 LevelManager.prototype.decreaseMoves = function(){
     this.remainingMoves -=1;
     this.topBar.setRemainingMoves(this.remainingMoves);
+    if(this.remainingMoves <= 0){
+        this.endMatch();
+    }
 };
 LevelManager.prototype.increaseMoves = function(){
     this.remainingMoves +=1;
     this.topBar.setRemainingMoves(this.remainingMoves);
+};
+
+LevelManager.prototype.endMatch = function(){
+    var options = {
+        stars:0,
+        score:this.scoreNow
+    };
+    if(this.scoreNow >= this.scoreGoal*0.33){
+        options.stars+=1;
+    }
+    if(this.scoreNow >= this.scoreGoal*0.66){
+        options.stars+=1;
+    }
+    
+    if(this.scoreNow == this.scoreGoal){
+        options.stars+=1;
+    }
+    this.board.activated = false;
+
+    this.gameManager.openPanelScore(options);
 };
